@@ -1,0 +1,32 @@
+{
+  "window": {
+    "title": "Test UI - wr_ui_runtime",
+    "width": 400,
+    "height": 300,
+    "fullscreen": false
+  },
+  "custom_styles": "body { background-color: #333; color: #eee; text-align: center; padding-top: 30px; } button { font-size: 16px; padding: 10px 20px; }",
+  "components": [
+    {
+      "type": "label",
+      "text": "This is a test UI for wr_ui_runtime.",
+      "attributes": { "style": "font-size: 18px; margin-bottom: 20px;" }
+    },
+    {
+      "type": "button",
+      "text": "Click Me for Action!",
+      "action": {
+        "type": "test_click",
+        "payload": "Button 'Click Me for Action!' was successfully clicked.",
+        "timestamp": "2023-10-27T10:00:00Z" 
+      },
+      "attributes": { "id": "testButton1" }
+    },
+    {
+      "type": "input",
+      "placeholder": "Test input field...",
+      "initial_value": "Some default text",
+      "attributes": { "id": "testInput1", "style": "width: 80%; margin-top: 15px;" }
+    }
+  ]
+}
