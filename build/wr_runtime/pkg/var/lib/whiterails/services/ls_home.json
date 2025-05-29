@@ -1,0 +1,11 @@
+{
+  "name": "ListHomeDir",
+  "condition": "always_true",
+  "interval": 30,
+  "actions": [
+    {
+      "type": "list_files",
+      "path": "/home"
+    }
+  ]
+}
