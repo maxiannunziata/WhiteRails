@@ -64,7 +64,7 @@ This section guides you through installing and configuring WhiteRails. While des
 
 **1. Clone the Repository:**
    ```bash
-   git clone <repository_url> # Replace <repository_url> with the actual URL
+   git clone https://github.com/maxiannunziata/WhiteRails
    cd whiterails-project # Replace whiterails-project with the actual repo folder name
    ```
 
