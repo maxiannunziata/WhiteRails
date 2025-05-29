@@ -1,0 +1,8 @@
+{
+  "name": "ShowUptime",
+  "condition": "battery_level >= 0",
+  "actions": [
+    { "type": "run_command", "command": "uptime" }
+  ],
+  "interval_seconds": 300
+}

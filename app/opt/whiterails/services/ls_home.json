@@ -1,0 +1,8 @@
+{
+  "name": "ListHome",
+  "condition": "battery_level >= 0",
+  "actions": [
+    { "type": "list_files", "path": "/home" }
+  ],
+  "interval_seconds": 120
+}

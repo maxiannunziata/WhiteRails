@@ -1,0 +1,8 @@
+{
+  "name": "MakeDirTest",
+  "condition": "battery_level >= 0",
+  "actions": [
+    { "type": "mkdir", "path": "/tmp/whiterails_test" }
+  ],
+  "interval_seconds": 180
+}
