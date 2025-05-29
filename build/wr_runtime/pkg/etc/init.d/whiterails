@@ -1,0 +1,9 @@
+#!/sbin/openrc-run
+description="WhiteRails semantic runtime"
+command="/usr/bin/wr_runtime"
+command_background="yes"
+pidfile="/run/wr_runtime.pid"
+
+depend() {
+    need localmount
+}

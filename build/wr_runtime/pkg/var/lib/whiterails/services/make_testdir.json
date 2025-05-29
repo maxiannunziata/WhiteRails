@@ -1,0 +1,11 @@
+{
+  "name": "CreateTmpDir",
+  "condition": "always_true",
+  "interval": 60,
+  "actions": [
+    {
+      "type": "mkdir",
+      "path": "/tmp/whiterails_test"
+    }
+  ]
+}

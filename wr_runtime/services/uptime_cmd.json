@@ -1,0 +1,11 @@
+{
+  "name": "LogUptime",
+  "condition": "always_true",
+  "interval": 45,
+  "actions": [
+    {
+      "type": "run_command",
+      "command": "uptime"
+    }
+  ]
+}
