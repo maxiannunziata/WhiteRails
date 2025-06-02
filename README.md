@@ -1,5 +1,5 @@
 # WhiteRails
-![WhiteRails Logo](https://sdmntprcentralus.oaiusercontent.com/files/00000000-c93c-61f5-9edb-19979c8465e6/raw?se=2025-05-29T11%3A40%3A03Z&sp=r&sv=2024-08-04&sr=b&scid=95082b2f-2234-5463-936f-ab53607a22ec&skoid=04233560-0ad7-493e-8bf0-1347c317d021&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2025-05-28T20%3A01%3A02Z&ske=2025-05-29T20%3A01%3A02Z&sks=b&skv=2024-08-04&sig=LG0TnjQCFQUCj2BRUtH3UqGPnn8gPEecsECsLtUugY8%3D)
+![Descripción](./wr.png)
 
 
 WhiteRails is a semantic runtime environment designed to understand and execute natural language commands on a Linux-based system. It bridges the gap between human language and system actions by leveraging a Large Language Model (LLM) to interpret commands and a native runtime to execute them securely and efficiently.
