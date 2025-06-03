@@ -14,7 +14,7 @@
 void app_action_list_files(const cJSON *action_params) {
     const cJSON *path_json = cJSON_GetObjectItemCaseSensitive(action_params, "path");
     if (!cJSON_IsString(path_json) || (path_json->valuestring == NULL)) {
-        LOG_LF_ERROR("Missing or invalid 'path' parameter.");
+        LOG_LF_ERROR("%s", "Missing or invalid 'path' parameter.");
         return;
     }
     const char *path = path_json->valuestring;
@@ -53,7 +53,7 @@ void app_action_list_files(const cJSON *action_params) {
 
     int status = pclose(fp);
     if (status == -1) {
-        LOG_LF_ERROR("pclose() failed.");
+        LOG_LF_ERROR("%s", "pclose() failed.");
     } else {
         if (WIFEXITED(status)) {
             LOG_LF_INFO("Command '%s' (popen) exited with status %d.", cmd_buffer, WEXITSTATUS(status));

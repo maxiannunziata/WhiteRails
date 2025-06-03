@@ -35,8 +35,8 @@ OBJ := $(SRC:.c=.o)
 # -I$(DEPDIR)/cJSON: Add include directory for cJSON header
 # LDFLAGS for linking (used implicitly by linking .o files)
 # -s: Strip all symbols from the output file (reduces size)
-CFLAGS := -static -Os -Wall -Wextra -pedantic -std=c11 -I$(INCDIR) -I$(DEPDIR)/cJSON
-LDFLAGS := -s
+CFLAGS = -Os -Wall -Wextra -pedantic -std=c11 -Iinclude -Ideps/cJSON
+LDFLAGS = -s
 
 TARGET := wr_runtime
 

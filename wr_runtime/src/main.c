@@ -4,6 +4,7 @@
 #include <syslog.h>   // For openlog, syslog, closelog
 #include <time.h>     // For time()
 #include <string.h>   // For strcmp
+#include <errno.h>    // For errno
 #include <fcntl.h>    // For open, O_RDWR
 #include <sys/stat.h> // For umask (if daemonizing)
 
@@ -17,13 +18,13 @@
 
 // Simple daemonize function (optional, can be handled by init system too)
 // For a more robust daemon, consider double fork, proper signal handling, pid file etc.
-static void daemonize_basic() {
+static void __attribute__((unused)) daemonize_basic() {
     pid_t pid;
 
     // Fork off the parent process
     pid = fork();
     if (pid < 0) {
-        syslog(LOG_ERR, "fork failed during daemonize: %m");
+        syslog(LOG_ERR, "fork failed during daemonize: %s", strerror(errno));
         exit(EXIT_FAILURE);
     }
     if (pid > 0) { // Parent exits
@@ -32,7 +33,7 @@ static void daemonize_basic() {
 
     // Create a new session
     if (setsid() < 0) {
-        syslog(LOG_ERR, "setsid failed during daemonize: %m");
+        syslog(LOG_ERR, "setsid failed during daemonize: %s", strerror(errno));
         exit(EXIT_FAILURE);
     }
 

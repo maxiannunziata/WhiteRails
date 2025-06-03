@@ -4,6 +4,8 @@
 #include <stdlib.h>   // For malloc, free, ftell, fseek
 #include <dirent.h>   // For directory operations
 #include <sys/stat.h> // For stat, to check if it's a directory
+#include <stddef.h>   // For size_t
+#include <errno.h>    // For errno
 
 #include "service_loader.h"
 #include "schema.h"       // For SERVICE_SCHEMA (used by validator)
@@ -88,7 +90,7 @@ int validate_json_with_hardcoded_schema(const cJSON *json_service_obj, const cha
             return -1;
         }
         const char* optional_props[] = {"path", "command", "message"};
-        for (int i = 0; i < (sizeof(optional_props) / sizeof(optional_props[0])); ++i) {
+        for (size_t i = 0; i < (sizeof(optional_props) / sizeof(optional_props[0])); ++i) {
             const cJSON* prop = cJSON_GetObjectItemCaseSensitive(action_item, optional_props[i]);
             if (prop) {
                 if (!cJSON_IsString(prop) || (prop->valuestring == NULL) || (prop->valuestring[0] == '\0')) {
@@ -120,7 +122,7 @@ void SvcLoader_init(void) {
 }
 
 void SvcLoader_free_all_services(void) {
-    LOG_DEBUG("Freeing all loaded services...");
+    LOG_DEBUG("%s", "Freeing all loaded services...");
     for (int i = 0; i < MAX_SERVICES; i++) {
         if (loaded_services[i].loaded && loaded_services[i].config_json != NULL) {
             cJSON_Delete(loaded_services[i].config_json);
@@ -129,7 +131,7 @@ void SvcLoader_free_all_services(void) {
         loaded_services[i].loaded = 0; // Mark as free
     }
     num_loaded_services = 0;
-    LOG_INFO("All services freed and unloaded.");
+    LOG_INFO("%s", "All services freed and unloaded.");
 }
 
 static char* read_file_to_string(const char *filepath) {
@@ -140,15 +142,34 @@ static char* read_file_to_string(const char *filepath) {
     }
     fseek(file, 0, SEEK_END);
     long length = ftell(file);
-    fseek(file, 0, SEEK_SET);
+    if (length == -1L) {
+        LOG_ERROR("ftell failed for file %s: %s", filepath, strerror(errno));
+        fclose(file);
+        return NULL;
+    }
+    fseek(file, 0, SEEK_SET); // TODO: Consider checking fseek return value too
+
     char *buffer = (char*)malloc(length + 1);
     if (!buffer) {
         LOG_ERROR("Could not allocate memory to read file: %s", filepath);
         fclose(file);
         return NULL;
     }
-    fread(buffer, 1, length, file);
-    buffer[length] = '\0';
+
+    size_t bytes_read = fread(buffer, 1, (size_t)length, file);
+
+    if (bytes_read < (size_t)length) {
+        if (ferror(file)) {
+            LOG_ERROR("fread error for file %s: %s", filepath, strerror(errno));
+        } else {
+            LOG_ERROR("fread incomplete for file %s: read %zu bytes, expected %ld bytes (EOF?)", filepath, bytes_read, length);
+        }
+        free(buffer);
+        fclose(file);
+        return NULL;
+    }
+
+    buffer[bytes_read] = '\0';
     fclose(file);
     return buffer;
 }
@@ -159,7 +180,7 @@ void SvcLoader_load_services(const char *services_dir_path) {
     char filepath[1024]; // For constructing full path to service files
 
     if (!services_dir_path) {
-        LOG_ERROR("Services directory path is NULL.");
+        LOG_ERROR("%s", "Services directory path is NULL.");
         return;
     }
     
