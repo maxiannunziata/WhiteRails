@@ -3,6 +3,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <errno.h>
 #include "cJSON.h" // Found via CFLAGS -I deps/cJSON
 // Assuming dispatcher.h declares app_action_run_command, or ensure signature matches
 // For action_fn: #include "dispatcher.h" 
@@ -15,7 +16,7 @@
 void app_action_run_command(const cJSON *action_params) {
     const cJSON *cmd_json = cJSON_GetObjectItemCaseSensitive(action_params, "command");
     if (!cJSON_IsString(cmd_json) || (cmd_json->valuestring == NULL)) {
-        LOG_RC_ERROR("Missing or invalid 'command' parameter.");
+        LOG_RC_ERROR("%s", "Missing or invalid 'command' parameter.");
         return;
     }
     const char *cmd = cmd_json->valuestring;
@@ -23,23 +24,23 @@ void app_action_run_command(const cJSON *action_params) {
 
     pid_t pid = fork();
     if (pid == -1) {
-        LOG_RC_ERROR("Failed to fork: %m"); // %m prints strerror(errno)
+        LOG_RC_ERROR("Failed to fork: %s", strerror(errno)); // %m prints strerror(errno)
         return;
     } else if (pid == 0) { // Child process
         if (setsid() == -1) { // Create new session and detach from terminal
-            LOG_RC_ERROR("Child setsid failed: %m");
+            LOG_RC_ERROR("Child setsid failed: %s", strerror(errno));
             _exit(EXIT_FAILURE);
         }
         // Close standard file descriptors (optional, good for daemons)
         // close(STDIN_FILENO); close(STDOUT_FILENO); close(STDERR_FILENO);
         
         execl("/bin/sh", "sh", "-c", cmd, (char *)0);
-        LOG_RC_ERROR("execl failed for /bin/sh -c '%s': %m", cmd); // Log if execl fails
+        LOG_RC_ERROR("execl failed for /bin/sh -c '%s': %s", cmd, strerror(errno)); // Log if execl fails
         _exit(EXIT_FAILURE); // Exit child if execl fails
     } else { // Parent process
         int status;
         if (waitpid(pid, &status, 0) == -1) {
-            LOG_RC_ERROR("waitpid failed: %m");
+            LOG_RC_ERROR("waitpid failed: %s", strerror(errno));
         } else {
             if (WIFEXITED(status)) {
                 LOG_RC_INFO("Command '%s' exited with status %d", cmd, WEXITSTATUS(status));

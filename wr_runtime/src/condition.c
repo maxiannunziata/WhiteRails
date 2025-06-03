@@ -22,6 +22,7 @@ void record_activity(void) {
 // Params and service_name_for_log are unused by this specific evaluator but part of signature
 int eval_condition_always_true(const cJSON *params, const char *service_name_for_log) {
     (void)params; // Suppress unused warning
+    (void)service_name_for_log; // Suppress unused warning for service_name_for_log
     // printf("Evaluating condition 'always_true' for service '%s': TRUE\n", service_name_for_log); // Temporary log
     // Later: syslog(LOG_DEBUG, "Condition 'always_true' for service '%s' evaluated: TRUE", service_name_for_log);
     return 1; // Condition is always met

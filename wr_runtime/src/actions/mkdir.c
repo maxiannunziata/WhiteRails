@@ -59,7 +59,7 @@ static int mkdir_p(const char *path, mode_t mode) {
 void app_action_mkdir(const cJSON *action_params) {
     const cJSON *path_json = cJSON_GetObjectItemCaseSensitive(action_params, "path");
     if (!cJSON_IsString(path_json) || (path_json->valuestring == NULL)) {
-        LOG_MKDIR_ERROR("Missing or invalid 'path' parameter.");
+        LOG_MKDIR_ERROR("%s", "Missing or invalid 'path' parameter.");
         return;
     }
     const char *path = path_json->valuestring;

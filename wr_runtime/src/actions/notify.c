@@ -10,7 +10,7 @@
 void app_action_notify(const cJSON *action_params) {
     const cJSON *msg_json = cJSON_GetObjectItemCaseSensitive(action_params, "message");
     if (!cJSON_IsString(msg_json) || (msg_json->valuestring == NULL)) {
-        LOG_NOTIFY_ERROR("Missing or invalid 'message' parameter.");
+        LOG_NOTIFY_ERROR("%s", "Missing or invalid 'message' parameter.");
         return;
     }
     const char *message = msg_json->valuestring;
